@@ -1,0 +1,14 @@
+{
+  admin = {
+    mdp = "secret",
+    role = "administrateur",
+  },
+  user = {
+    mdp = "secret",
+    role = "utilisateur",
+  },
+  user2 = {
+    mdp = "secret",
+    role = "utilisateur",
+  },
+}

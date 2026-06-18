@@ -1,0 +1,63 @@
+local function getCurrentTimeParis()
+    local url = "https://timeapi.io/api/v1/time/current/zone?timezone=Europe%2FParis"
+    local req = { url = url}
+    local res = http.get(req)
+
+    if res then
+        local rawJson = res.readAll()
+        res.close()
+
+        local data = textutils.unserialiseJSON(rawJson)
+
+        if data and data.date_time then
+            local date = string.sub(data.date_time, 1, 10)
+            local heure = string.sub(data.date_time, 12, 19)
+            return 200, date, heure
+        else
+            return 404, nil, nil
+        end
+    else
+        return 500, nil, nil
+    end
+end
+
+local function chargerDonnees(FICHIER_DB, FICHIER_LOGS, bdd, logs)
+    if fs.exists(FICHIER_DB) then
+        local fichier = fs.open(FICHIER_DB, "r")
+        local contenu = fichier.readAll()
+        fichier.close()
+
+        bdd = textutils.unserialise(contenu) or {}
+        print("Base de donnees chargee.") -- (" .. #bdd .. " entrees)")
+        return bdd
+    else
+        print("Nouvelle base de donnees creee.")
+        bdd = {
+            admin = { mdp = "secret", role = "administrateur" }
+        }
+
+        return bdd
+    end
+    
+    if fs.exists(FICHIER_LOGS) then
+        local fichier = fs.open(FICHIER_LOGS, "r")
+        local contenu = fichier.readAll()
+        fichier.close()
+
+        logs = contenu
+        print("Logs charges.")
+    else
+        print("Nouveau fichier log cree.")
+        logs = "Nouveau fichier"
+    end
+    sauvegarderDonnees(FICHIER_DB, bdd)
+end
+
+function sauvegarderDonnees(FICHIER_DB, bdd)
+    local fichier = fs.open(FICHIER_DB, "w")
+
+    fichier.write(textutils.serialise(bdd))
+    fichier.close()
+end
+
+return { getCurrentTimeParis = getCurrentTimeParis, chargerDonnees = chargerDonnees, sauvegarderDonnees = sauvegarderDonnees}

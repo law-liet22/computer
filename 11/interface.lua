@@ -1,0 +1,59 @@
+peripheral.find("modem", rednet.open)
+if not rednet.isOpen() then
+    error("Aucun modem trouve !")
+end
+
+local PROTOCOLE = "api_rp"
+local NOM_SERVEUR = "serveur_central"
+
+print("Recherche du serveur...")
+
+local idServeur = rednet.lookup(PROTOCOLE, NOM_SERVEUR)
+
+if not idServeur then
+    error("Impossible de connecter le serveur central.")
+end
+
+print("Serveur trouve (ID : " .. idServeur .. ")")
+
+local function faireRequete(donnees)
+    rednet.send(idServeur, donnees, PROTOCOLE)
+
+    local id, reponse = rednet.receive(PROTOCOLE, 5)
+
+    if reponse then
+        return reponse
+    else
+        return { statut = "erreur", message = "Delai d'attente depasse (timeout)"}
+    end
+end
+
+while true do
+    term.clear()
+    term.setCursorPos(1, 1)
+    print("=== CONNEXION ===")
+    write("Utilisateur : ")
+    local util = read()
+    write("Mot de passe : ")
+    local mdp = read("*")
+
+    print("\nAuthentification en cours...")
+
+    local maRequete = {
+        action = "connexion",
+        user = util,
+        mdp = mdp
+    }
+
+    local result = faireRequete(maRequete)
+
+    print("\n--- REPONSE DU SERVEUR ---")
+    if result.statut == "succes" then
+        print("Succes : " .. result.message)
+        print("Votre role : " .. result.role)
+        sleep(5)
+    else
+        print("Erreur : " .. result.message)
+        sleep(5)
+    end
+end
