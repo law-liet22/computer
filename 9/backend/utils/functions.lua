@@ -60,4 +60,31 @@ function sauvegarderDonnees(FICHIER_DB, bdd)
     fichier.close()
 end
 
-return { getCurrentTimeParis = getCurrentTimeParis, chargerDonnees = chargerDonnees, sauvegarderDonnees = sauvegarderDonnees}
+function ajouterLogEtPrint(msg, FICHIER_LOGS)
+
+    if msg == nil then
+        return
+    end
+
+    local fichier = fs.open(FICHIER_LOGS, "a")
+    local apiStatus, date, heure = getCurrentTimeParis()
+
+    if apiStatus == 200 then
+        fichier.write("[" .. date .. "T" .. heure .. "] " .. msg .. "\n")
+        print("[" .. date .. "T" .. heure .. "] " .. msg .. "\n")
+    elseif apiStatus == 404 then
+        fichier.write("[N/A : 404] " .. msg .. "\n")
+        print("[N/A : 404] " .. msg .. "\n")
+    elseif apiStatus == 500 then
+        fichier.write("[N/A : 500] " .. msg .. "\n")
+        print("[N/A : 500] " .. msg .. "\n")
+    end
+
+    fichier.close()
+end
+
+return { getCurrentTimeParis = getCurrentTimeParis, 
+        chargerDonnees = chargerDonnees, 
+        sauvegarderDonnees = sauvegarderDonnees,
+        ajouterLogEtPrint = ajouterLogEtPrint
+    }
