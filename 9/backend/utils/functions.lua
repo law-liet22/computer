@@ -21,6 +21,13 @@ local function getCurrentTimeParis()
     end
 end
 
+local function sauvegarderDonnees(FICHIER_DB, bdd)
+    local fichier = fs.open(FICHIER_DB, "w")
+
+    fichier.write(textutils.serialise(bdd))
+    fichier.close()
+end
+
 local function chargerDonnees(FICHIER_DB, FICHIER_LOGS, bdd, logs)
     if fs.exists(FICHIER_DB) then
         local fichier = fs.open(FICHIER_DB, "r")
@@ -53,12 +60,7 @@ local function chargerDonnees(FICHIER_DB, FICHIER_LOGS, bdd, logs)
     sauvegarderDonnees(FICHIER_DB, bdd)
 end
 
-local function sauvegarderDonnees(FICHIER_DB, bdd)
-    local fichier = fs.open(FICHIER_DB, "w")
 
-    fichier.write(textutils.serialise(bdd))
-    fichier.close()
-end
 
 local function ajouterLogEtPrint(msg, FICHIER_LOGS)
 

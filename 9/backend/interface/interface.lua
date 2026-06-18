@@ -51,6 +51,7 @@ while true do
     if result.statut == "succes" then
         print("Succes : " .. result.message)
         print("Votre role : " .. result.role)
+        print("Votre departement : " .. result.departement)
         sleep(5)
     else
         print("Erreur : " .. result.message)

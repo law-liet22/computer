@@ -85,7 +85,7 @@ local function routeurReseau()
                 local mdp = requete.mdp
 
                 if bdd[nomUser] and bdd[nomUser].mdp == mdp then
-                    reponse = { statut = "succes", message = "Connexion reussie", role = bdd[nomUser].role }
+                    reponse = { statut = "succes", message = "Connexion reussie", role = bdd[nomUser].role, departement = bdd[nomUser].departement }
                 else
                     reponse = { statut = "error", message = "Identifiants incorrects" }
                 end
