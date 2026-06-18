@@ -15,6 +15,7 @@ if not rednet.isOpen() then
 
 else
     print("Recherche de mise a jour")
+    sleep(3)
     local idServeur = rednet.lookup(PROTOCOLE, NOM_SERVEUR)
 
     if idServeur then
@@ -26,7 +27,7 @@ else
             fichier.write(reponse.code)
             fichier.close()
             print("Mise a jour appliquee.")
-            sleep(1)
+            sleep(3)
         else
             print("Echec de la recuperation de la maj.")
             print(reponse.statut .. " : " .. reponse.message)

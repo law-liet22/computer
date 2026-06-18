@@ -53,14 +53,14 @@ local function chargerDonnees(FICHIER_DB, FICHIER_LOGS, bdd, logs)
     sauvegarderDonnees(FICHIER_DB, bdd)
 end
 
-function sauvegarderDonnees(FICHIER_DB, bdd)
+local function sauvegarderDonnees(FICHIER_DB, bdd)
     local fichier = fs.open(FICHIER_DB, "w")
 
     fichier.write(textutils.serialise(bdd))
     fichier.close()
 end
 
-function ajouterLogEtPrint(msg, FICHIER_LOGS)
+local function ajouterLogEtPrint(msg, FICHIER_LOGS)
 
     if msg == nil then
         return
@@ -83,8 +83,44 @@ function ajouterLogEtPrint(msg, FICHIER_LOGS)
     fichier.close()
 end
 
+local function envoyerLogDiscord(title, msg, color, webhookUrl)
+    local embed = {
+        title = title,
+        description = msg,
+        color = color
+    }
+
+    local payload = {
+        content = "",
+        embeds = {
+            [1] = embed
+        }
+    }
+
+    local jsonPayload = textutils.serialiseJSON(payload)
+
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+
+    local response, err, errResponse = http.post(webhookUrl, jsonPayload, headers)
+    
+    if response then
+        print("Webhook envoye.")
+        response.close()
+    else
+        print("Erreur d'envoi (" .. tostring(err) .. ")")
+        if errResponse then
+            print("Reponse de Discord : " .. errResponse.readAll())
+            sleep(5)
+            errResponse.close()
+        end
+    end
+end
+
 return { getCurrentTimeParis = getCurrentTimeParis, 
         chargerDonnees = chargerDonnees, 
         sauvegarderDonnees = sauvegarderDonnees,
-        ajouterLogEtPrint = ajouterLogEtPrint
+        ajouterLogEtPrint = ajouterLogEtPrint,
+        envoyerLogDiscord = envoyerLogDiscord
     }

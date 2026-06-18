@@ -19,6 +19,8 @@ local logs = ""
 -- Message lors du démarrage du serveur
 local msgServeurDemarre = "Serveur [" .. NOM_SERVEUR .. "] demarre sur le protocole [" .. PROTOCOLE .. "]."
 
+utils.envoyerLogDiscord("D\233marrage", msgServeurDemarre, tonumber(0xFF0000), "https://discord.com/api/webhooks/1517216741502091284/P85rO3fNTuFL9wlLSCdm_-K895vy_n7g-_BNWOULWoepqBRS8k5o2gwGtU3NOlBBNY2H")
+
 -- Clear le terminal 
 term.setBackgroundColor(colors.black)
 term.setTextColor(colors.white)
