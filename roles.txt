@@ -1,0 +1,3 @@
+utilisateur : user
+administrateur : admin
+superadmin : superadmin

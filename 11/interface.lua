@@ -1,3 +1,5 @@
+local utils = require("/fonctions")
+
 peripheral.find("modem", rednet.open)
 if not rednet.isOpen() then
     error("Aucun modem trouve !")
@@ -39,19 +41,30 @@ while true do
 
     print("\nAuthentification en cours...")
 
-    local maRequete = {
+    local requeteConnexion = {
         action = "connexion",
         user = util,
         mdp = mdp
     }
 
-    local result = faireRequete(maRequete)
+    local result = faireRequete(requeteConnexion)
 
     print("\n--- REPONSE DU SERVEUR ---")
     if result.statut == "succes" then
         print("Succes : " .. result.message)
         print("Votre role : " .. result.role)
+        print("Votre departement : " .. result.departement)
         sleep(5)
+        utils.clearTerminalAndShowInfos(result.role, result.departement)
+        utils.afficherMenu()
+        print("Que souhaitez vous faire ?")
+        term.read()
+
+        -- Faire menu (fonction)
+        
+
+
+
     else
         print("Erreur : " .. result.message)
         sleep(5)

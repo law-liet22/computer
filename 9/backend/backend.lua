@@ -13,6 +13,7 @@ local NOM_SERVEUR = "serveur_central"
 local FICHIER_DB = "bdd_utilisateurs.txt"
 local FICHIER_LOGS = "logs.txt"
 local FICHIER_INTERFACE_CLIENT = "/backend/interface/interface.lua"
+local FICHIER_FONCTIONS_CLIENT = "/backend/interface/fonctions.lua"
 local bdd = {}
 local logs = ""
 
@@ -87,7 +88,7 @@ local function routeurReseau()
                 if bdd[nomUser] and bdd[nomUser].mdp == mdp then
                     reponse = { statut = "succes", message = "Connexion reussie", role = bdd[nomUser].role, departement = bdd[nomUser].departement }
                 else
-                    reponse = { statut = "error", message = "Identifiants incorrects" }
+                    reponse = { statut = "error", message = "Identifiants incorrects. Si vous n'avez pas encore de compte sur le reseau, veuillez en demander au plus vite a l'ASIA." }
                 end
 
             elseif requete.action == "createAccount" then
@@ -103,12 +104,15 @@ local function routeurReseau()
                 end
 
             elseif requete.action == "telechargerMaj" then
-                if fs.exists(FICHIER_INTERFACE_CLIENT) then
+                if fs.exists(FICHIER_INTERFACE_CLIENT) and fs.exists(FICHIER_FONCTIONS_CLIENT) then
                     local fichierCode = fs.open(FICHIER_INTERFACE_CLIENT, "r")
                     local codeSource = fichierCode.readAll()
-                    fichierCode.close()
+                    local fichierCodeFonctions = fs.open(FICHIER_FONCTIONS_CLIENT, "r")
+                    local fonctionsClients = fichierCodeFonctions.readAll()
+                    fichierCodeFonctions.close()
+                    fichierCode.close()                    
 
-                    reponse = { statut = "succes", code = codeSource }
+                    reponse = { statut = "succes", code = codeSource, fonctions = fonctionsClients }
                 else
                     reponse = { statut = "error", message = "Fichier source introuvable sur le serveur." }
                 end

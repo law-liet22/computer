@@ -1,6 +1,7 @@
 local PROTOCOLE = "api_rp"
 local NOM_SERVEUR = "serveur_central"
 local FICHIER_CIBLE = "interface.lua"
+local FICHIER_FONCTIONS = "fonctions.lua"
 
 
 term.setBackgroundColor(colors.black)
@@ -26,6 +27,11 @@ else
             local fichier = fs.open(FICHIER_CIBLE, "w")
             fichier.write(reponse.code)
             fichier.close()
+
+            local fonctions = fs.open(FICHIER_FONCTIONS, "w")
+            fonctions.write(reponse.fonctions)
+            fonctions.close()
+
             print("Mise a jour appliquee.")
             sleep(3)
         else
