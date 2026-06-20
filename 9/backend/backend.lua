@@ -54,7 +54,7 @@ local function watcherBdd()
     end
 
     while true do
-        sleep(2)
+        sleep(1)
         
         if fs.exists(FICHIER_DB) then
             local modifActuelle = fs.attributes(FICHIER_DB).modified

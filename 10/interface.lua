@@ -30,6 +30,8 @@ local function faireRequete(donnees)
     end
 end
 
+local isInMenu = true
+
 while true do
     term.clear()
     term.setCursorPos(1, 1)
@@ -54,19 +56,17 @@ while true do
         print("Succes : " .. result.message)
         print("Votre role : " .. result.role)
         print("Votre departement : " .. result.departement)
-        sleep(5)
-        utils.clearTerminalAndShowInfos(result.role, result.departement)
-        utils.afficherMenu(result.role)
-        print("Que souhaitez vous faire ?")
-        local choix = read()
-
-        -- Faire menu (fonction)
-        
-
+        sleep(3)
+        while isInMenu do
+            utils.clearTerminalAndShowInfos(result.role, result.departement)
+            utils.afficherMenu(result.role)
+            print("Que souhaitez vous faire ?")
+            local choix = read()
+        end
 
 
     else
         print("Erreur : " .. result.message)
-        sleep(5)
+        sleep(3)
     end
 end

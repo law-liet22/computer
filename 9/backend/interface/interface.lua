@@ -30,6 +30,38 @@ local function faireRequete(donnees)
     end
 end
 
+local ACTIONS = {
+    logout = function()
+        print("Deconnexion...")
+        return false
+    end,
+    my_infos = function(role, departement)
+        print("Role : " .. role)
+        print("Departement : " .. departement)
+        return true
+    end,
+    files = function()
+        print("Acces aux fichiers a implementer.")
+        return true
+    end,
+    create_user = function()
+        print("Creation utilisateur a implementer.")
+        return true
+    end,
+    delete_user = function()
+        print("Suppression utilisateur a implementer.")
+        return true
+    end,
+    update_user = function()
+        print("Modification utilisateur a implementer.")
+        return true
+    end,
+    manage_admins = function()
+        print("Gestion des admins a implementer.")
+        return true
+    end
+}
+
 while true do
     term.clear()
     term.setCursorPos(1, 1)
@@ -54,19 +86,37 @@ while true do
         print("Succes : " .. result.message)
         print("Votre role : " .. result.role)
         print("Votre departement : " .. result.departement)
-        sleep(5)
-        utils.clearTerminalAndShowInfos(result.role, result.departement)
-        utils.afficherMenu(result.role)
-        print("Que souhaitez vous faire ?")
-        local choix = read()
+        sleep(3)
 
-        -- Faire menu (fonction)
-        
+        local isInMenu = true
+        while isInMenu do
+            utils.clearTerminalAndShowInfos(result.role, result.departement)
+            utils.afficherMenu(result.role)
+            print("Que souhaitez vous faire ?")
+            local choix = read()
 
+            local action = utils.getActionFromChoice(result.role, choix)
+            if not action then
+                print("Choix invalide.")
+                sleep(2)
+            else
+                local handler = ACTIONS[action]
+                if not handler then
+                    print("Action non geree : " .. action)
+                    sleep(2)
+                else
+                    isInMenu = handler(result.role, result.departement)
+                    if isInMenu then
+                        print("\nAppuyez sur Entree pour continuer...")
+                        read()
+                    end
+                end
+            end
+        end
 
 
     else
         print("Erreur : " .. result.message)
-        sleep(5)
+        sleep(3)
     end
 end

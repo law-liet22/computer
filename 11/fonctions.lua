@@ -7,12 +7,30 @@ end
 
 local function clearTerminalAndShowInfos(role, departement)
     clearTerminal()
-    print("Role : " .. role .."\n Departement : " .. departement .. "\n\n")
+    print("Role : " .. role .."\nDepartement : " .. departement .. "\n\n")
+end
+
+local function menuAdmin()
+    return "0. Se deconnecter\n1. Creer compte utilisateur\n2. Supprimer compte utilisateur\n 3. Modifier compte utilisateur\n4. Vos informations\n5. Acceder aux fichiers"
+end
+
+local function menuUser()
+    return "0. Se deconnecter\n1. Vos informations\n2. Acceder aux fichiers"
+end
+
+local function menuSuperAdmin()
+    return "0. Se deconnecter\n1. Creer compte utilisateur\n2. Supprimer compte utilisateur\n3. Modifier compte utilisateur\n4. Gerer comptes admin\n5. Vos informations\n6. Acceder aux fichiers"
 end
 
 local function afficherMenu(userRole)
-    print("1. Vos informations")
-    print("2. Consulter les fichiers")
+    if userRole == "admin" then
+        print(menuAdmin())
+    elseif userRole == "user" then
+        print(menuUser())
+    elseif userRole == "superadmin" then
+        print(menuSuperAdmin())
+    end
+    print("\n")
 end
 
 return { clearTerminal = clearTerminal,

@@ -114,7 +114,7 @@ local function envoyerLogDiscord(title, msg, color, webhookUrl)
         print("Erreur d'envoi (" .. tostring(err) .. ")")
         if errResponse then
             print("Reponse de Discord : " .. errResponse.readAll())
-            sleep(5)
+            sleep(3)
             errResponse.close()
         end
     end

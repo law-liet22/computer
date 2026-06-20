@@ -10,30 +10,69 @@ local function clearTerminalAndShowInfos(role, departement)
     print("Role : " .. role .."\nDepartement : " .. departement .. "\n\n")
 end
 
-local function menuAdmin()
-    return "1. Creer compte utilisateur\n2. Supprimer compte utilisateur\n 3. Modifier compte utilisateur\n4. Vos informations\n5. Acceder aux fichiers"
-end
+local MENUS = {
+  user = {
+    { key = "logout", label = "Se deconnecter" },
+    { key = "my_infos", label = "Vos informations" },
+    { key = "files", label = "Acceder aux fichiers" },
+  },
+  admin = {
+    { key = "logout", label = "Se deconnecter" },
+    { key = "create_user", label = "Creer compte utilisateur" },
+    { key = "delete_user", label = "Supprimer compte utilisateur" },
+    { key = "update_user", label = "Modifier compte utilisateur" },
+    { key = "my_infos", label = "Vos informations" },
+    { key = "files", label = "Acceder aux fichiers" },
+  },
+  superadmin = {
+    { key = "logout", label = "Se deconnecter" },
+    { key = "create_user", label = "Creer compte utilisateur" },
+    { key = "delete_user", label = "Supprimer compte utilisateur" },
+    { key = "update_user", label = "Modifier compte utilisateur" },
+    { key = "manage_admins", label = "Gerer comptes admin" },
+    { key = "my_infos", label = "Vos informations" },
+    { key = "files", label = "Acceder aux fichiers" },
+  }
+}
 
-local function menuUser()
-    return "1. Vos informations\n2. Acceder aux fichiers"
-end
-
-local function menuSuperAdmin()
-    return "1. Creer compte utilisateur\n2. Supprimer compte utilisateur\n3. Modifier compte utilisateur\n4. Gerer comptes admin\n5. Vos informations\n6. Acceder aux fichiers"
+local function getMenuForRole(userRole)
+    return MENUS[userRole]
 end
 
 local function afficherMenu(userRole)
-    if userRole == "admin" then
-        print(menuAdmin())
-    elseif userRole == "user" then
-        print(menuUser())
-    elseif userRole == "superadmin" then
-        print(menuSuperAdmin())
+    local menu = getMenuForRole(userRole)
+
+    if not menu then
+        print("Role inconnu : " .. tostring(userRole))
+        print("\n")
+        return
     end
+
+    for index, item in ipairs(menu) do
+        print((index - 1) .. ". " .. item.label)
+    end
+
     print("\n")
+end
+
+local function getActionFromChoice(userRole, choix)
+    local menu = getMenuForRole(userRole)
+    local choixNumerique = tonumber(choix)
+
+    if not menu or not choixNumerique then
+        return nil
+    end
+
+    local entree = menu[choixNumerique + 1]
+    if not entree then
+        return nil
+    end
+
+    return entree.key
 end
 
 return { clearTerminal = clearTerminal,
         clearTerminalAndShowInfos = clearTerminalAndShowInfos,
-        afficherMenu = afficherMenu
+        afficherMenu = afficherMenu,
+        getActionFromChoice = getActionFromChoice
 }
